@@ -9,10 +9,14 @@ import Component from "./components/Learning/UseRef/Component";
 import FocusInput from "./components/Learning/UseRef/FocusInput";
 import Scroll from "./components/Learning/UseRef/Scroll";
 import Carts from "./components/Practice/Carts/Carts";
+import SingleCheckbox from "./components/Learning/StateAdvanced/SigleCheckbox";
+import MultipleCheckboxes from "./components/Learning/StateAdvanced/MultipleCheckboxes";
+import RadioButtons from "./components/Learning/StateAdvanced/RadioButtons";
+import Form from "./components/Practice/Signup/Form";
 export default function App() {
   return (
     <div>
-      <Carts />
+      <Form />
     </div>
   );
 }
