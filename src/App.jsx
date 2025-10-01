@@ -1,8 +1,10 @@
-import PostLimitSkip from "./components/Practice/PostLimitSkip/Container";
+import Poppular from "./components/TMDB/Poppular";
+import Search from "./components/TMDB/Search";
+
 export default function App() {
   return (
     <div>
-      <PostLimitSkip />
+      <Search />
     </div>
   );
 }
