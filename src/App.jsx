@@ -13,10 +13,11 @@ import SingleCheckbox from "./components/Learning/StateAdvanced/SigleCheckbox";
 import MultipleCheckboxes from "./components/Learning/StateAdvanced/MultipleCheckboxes";
 import RadioButtons from "./components/Learning/StateAdvanced/RadioButtons";
 import Form from "./components/Practice/Signup/Form";
+import ProductContainer from "./components/Practice/ProductsSort/ProductContainer";
 export default function App() {
   return (
     <div>
-      <Form />
+      <ProductContainer />
     </div>
   );
 }
