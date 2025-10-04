@@ -1,42 +1,44 @@
 import TodoForm from "./TodoForm";
 import Todo from "./Todo";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import TodoFilter from "./TodoFilter";
 
-const tempTodo = {
-  id: 1,
-  content: "예시",
-  completed: false,
-  color: "#000000",
-  priority: "낮음",
-};
 export default function TodoContainer() {
   const [todos, setTodos] = useState([]);
-  const [filteredTodos, setFilteredTodos] = useState([]);
   const [currentFilter, setCurrentFilter] = useState("all");
 
   useEffect(() => {
-    const storageTodos = localStorage.getItem("todos");
+    const storageTodos = getStorageTodos();
 
     if (storageTodos) {
-      const parsedTodos = JSON.parse(storageTodos);
-      setTodos(parsedTodos);
-      setFilteredTodos(parsedTodos);
+      setTodos(storageTodos);
     } else {
-      setTodos([tempTodo]);
-      setFilteredTodos([tempTodo]);
+      setTodos([]);
     }
   }, []);
 
-  function applyFilter(todosList, filter) {
-    if (filter === "all") {
-      return todosList;
-    } else if (filter === "incomplete") {
-      return todosList.filter((todo) => !todo.completed);
-    } else if (filter === "completed") {
-      return todosList.filter((todo) => todo.completed);
+  function setStorageTodos(todos) {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }
+
+  function getStorageTodos() {
+    try {
+      const storageTodos = localStorage.getItem("todos");
+      return storageTodos ? JSON.parse(storageTodos) : [];
+    } catch (error) {
+      console.error("localStorage 접근 오류:", error);
+      return [];
     }
   }
+
+  const filteredTodosMemo = useMemo(() => {
+    const filterMap = {
+      all: () => todos,
+      incomplete: () => todos.filter((todo) => !todo.completed),
+      completed: () => todos.filter((todo) => todo.completed),
+    };
+    return filterMap[currentFilter]?.() || todos;
+  }, [currentFilter, todos]);
 
   function handleAddTodo(todo) {
     const newTodo = {
@@ -47,15 +49,13 @@ export default function TodoContainer() {
 
     const updatedTodos = [...todos, newTodo];
     setTodos(updatedTodos);
-    setFilteredTodos(applyFilter(updatedTodos, currentFilter));
-    localStorage.setItem("todos", JSON.stringify(updatedTodos));
+    setStorageTodos(updatedTodos);
   }
 
   function handleDeleteTodo(id) {
     const updatedTodos = todos.filter((todo) => todo.id !== id);
     setTodos(updatedTodos);
-    setFilteredTodos(applyFilter(updatedTodos, currentFilter));
-    localStorage.setItem("todos", JSON.stringify(updatedTodos));
+    setStorageTodos(updatedTodos);
   }
 
   function handleCompleteTodo(id) {
@@ -69,21 +69,22 @@ export default function TodoContainer() {
       return todo;
     });
     setTodos(updatedTodos);
-    setFilteredTodos(applyFilter(updatedTodos, currentFilter));
-    localStorage.setItem("todos", JSON.stringify(updatedTodos));
+    setStorageTodos(updatedTodos);
   }
 
   function handleFilter(filter) {
     setCurrentFilter(filter);
-    setFilteredTodos(applyFilter(todos, filter));
   }
 
   return (
     <div className="max-w-6xl mx-auto p-6">
       <TodoForm onAddTodo={handleAddTodo} />
       <TodoFilter onFilter={handleFilter} />
+      {filteredTodosMemo.length === 0 && (
+        <p className="text-center text-gray-500">할 일이 없습니다.</p>
+      )}
       <div className="mt-6 w-full flex flex-col gap-4">
-        {filteredTodos.map((todo) => (
+        {filteredTodosMemo.map((todo) => (
           <Todo
             key={todo.id}
             todo={todo}

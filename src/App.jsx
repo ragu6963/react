@@ -1,10 +1,10 @@
-import Poppular from "./components/TMDB/Poppular";
-import Search from "./components/TMDB/Search";
+import Main from "./components/Homework/Main";
+import TodoContainer from "./components/Homework/Todo/TodoContainer";
 
 export default function App() {
   return (
     <div>
-      <Search />
+      <TodoContainer />
     </div>
   );
 }
