@@ -6,7 +6,7 @@ import findMinOperations from "../../../utils/dfs";
 export default function Container() {
   const [number, setNumber] = useState(1);
   const [targetNumber, setTargetNumber] = useState(10);
-  const [minCount, setMinCount] = useState(0);
+  const [minCount, setMinCount] = useState(999);
   const [count, setCount] = useState(0);
   const [gameStatus, setGameStatus] = useState("playing");
 
@@ -21,13 +21,14 @@ export default function Container() {
 
   // 게임 상태 체크
   useEffect(() => {
-    if (number === targetNumber && count <= minCount) {
-      alert("성공");
-      setGameStatus("stop");
-    }
-    if (number !== targetNumber && count > minCount) {
-      alert("시도 횟수 초과");
-      setGameStatus("stop");
+    if (count === minCount) {
+      if (number === targetNumber) {
+        alert("성공");
+        setGameStatus("stop");
+      } else {
+        alert("시도 횟수 초과");
+        setGameStatus("stop");
+      }
     }
   }, [number, targetNumber, count, minCount]);
 
