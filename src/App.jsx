@@ -1,9 +1,9 @@
-import Container from "./components/Homework/TargetNumber/Container";
+import CartSearchByUser from "./components/DummyJSON/CartSearchByUser";
 
 export default function App() {
   return (
     <div>
-      <Container />
+      <CartSearchByUser />
     </div>
   );
 }
